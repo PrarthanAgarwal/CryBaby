@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View, Text, StyleSheet, ScrollView } from "react-native"
+import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Card } from "@/components/Card"
 import { Button } from "@/components/ui/Button"
@@ -7,31 +7,40 @@ import { GridSelector, type GridOption } from "@/components/forms/GridSelector"
 import { DurationPicker } from "@/components/forms/DurationPicker"
 import { useTheme } from "@/hooks/useTheme"
 
-type Emotion = "happy" | "sad" | "angry" | "anxious" | "relieved" | "overwhelmed"
-type Volume = "spoonful" | "glass" | "bucket"
-
-const emotionOptions: GridOption[] = [
-  { emoji: "😊", text: "Happy", value: "happy" },
+const reasonOptions: GridOption[] = [
+  { emoji: "😊", text: "Happy Tears", value: "happy" },
   { emoji: "😢", text: "Sad", value: "sad" },
-  { emoji: "😠", text: "Angry", value: "angry" },
+  { emoji: "🧠", text: "Memory Lane", value: "memory" },
   { emoji: "😰", text: "Anxious", value: "anxious" },
-  { emoji: "😌", text: "Relieved", value: "relieved" },
-  { emoji: "😩", text: "Overwhelmed", value: "overwhelmed" },
+  { emoji: "🥺", text: "Overwhelmed", value: "overwhelmed" },
+  { emoji: "🤷", text: "Just Because", value: "justBecause" },
 ]
 
 const volumeOptions: GridOption[] = [
-  { emoji: "🥄", text: "Spoonful", value: "spoonful" },
   { emoji: "🥛", text: "Glass", value: "glass" },
-  { emoji: "🪣", text: "Bucket", value: "bucket" },
+  { emoji: "🍺", text: "Pint", value: "pint" },
+  { emoji: "🛢️", text: "Gallon", value: "gallon" },
+  { emoji: "🌊", text: "Waterfall", value: "waterfall" },
+  { emoji: "🌊🏠", text: "Floods", value: "floods" },
+  { emoji: "🌊🎲", text: "Tsunami", value: "tsunami" },
+]
+
+const satisfactionOptions: GridOption[] = [
+  { emoji: "😌", text: "Relief", value: "relief" },
+  { emoji: "🥰", text: "Therapeutic", value: "therapeutic" },
+  { emoji: "✨", text: "Refreshed", value: "refreshed" },
+  { emoji: "🎭", text: "Cathartic", value: "cathartic" },
 ]
 
 export default function Home() {
   const theme = useTheme()
   const [newSession, setNewSession] = useState({
-    emotion: null as string | null,
+    name: "",
+    reason: null as string | null,
     volume: null as string | null,
     hours: "0",
     minutes: "00",
+    satisfaction: null as string | null,
     notes: "",
   })
 
@@ -43,18 +52,26 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>Log Your Cry</Text>
+        <Text style={styles.title}>Describe your cry</Text>
 
         <Card style={styles.card}>
-          <Text style={styles.sectionTitle}>How are you feeling?</Text>
-          <GridSelector
-            options={emotionOptions}
-            selected={newSession.emotion}
-            onSelect={(value) => setNewSession({ ...newSession, emotion: value })}
-            columns={2}
+          <Text style={styles.sectionTitle}>Session name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Name this cry session"
+            value={newSession.name}
+            onChangeText={(value) => setNewSession({ ...newSession, name: value })}
           />
 
-          <Text style={styles.sectionTitle}>Volume of tears</Text>
+          <Text style={styles.sectionTitle}>Why the tears?</Text>
+          <GridSelector
+            options={reasonOptions}
+            selected={newSession.reason}
+            onSelect={(value) => setNewSession({ ...newSession, reason: value })}
+            columns={3}
+          />
+
+          <Text style={styles.sectionTitle}>Volume</Text>
           <GridSelector
             options={volumeOptions}
             selected={newSession.volume}
@@ -71,13 +88,31 @@ export default function Home() {
             maxDuration={{ hours: 23, minutes: 59 }}
           />
 
+          <Text style={styles.sectionTitle}>Satisfaction</Text>
+          <GridSelector
+            options={satisfactionOptions}
+            selected={newSession.satisfaction}
+            onSelect={(value) => setNewSession({ ...newSession, satisfaction: value })}
+            columns={3}
+          />
+
+          <Text style={styles.sectionTitle}>Additional notes</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="How do you feel about this cry?"
+            value={newSession.notes}
+            onChangeText={(value) => setNewSession({ ...newSession, notes: value })}
+            multiline
+            numberOfLines={4}
+          />
+
           <Button 
             onPress={handleSave}
             style={styles.saveButton}
-            disabled={!newSession.emotion || !newSession.volume}
-            accessibilityLabel="Save cry session"
+            disabled={!newSession.reason || !newSession.volume}
+            accessibilityLabel="Log cry session"
           >
-            Save Session
+            Log Session
           </Button>
         </Card>
       </ScrollView>
@@ -107,6 +142,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginTop: 20,
     color: "#1f2937",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: "#ffffff",
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: "top",
   },
   saveButton: {
     marginTop: 24,

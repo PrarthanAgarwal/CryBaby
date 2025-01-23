@@ -1,6 +1,6 @@
-import React from "react"
-import { View, Text, StyleSheet, type ViewStyle } from "react-native"
-import { Picker } from "@react-native-picker/picker"
+import React, { useState } from "react"
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from "react-native"
+import RNPickerSelect from 'react-native-picker-select'
 import * as Haptics from 'expo-haptics'
 
 interface DurationPickerProps {
@@ -8,103 +8,181 @@ interface DurationPickerProps {
   minutes: string
   onChangeHours: (value: string) => void
   onChangeMinutes: (value: string) => void
-  style?: ViewStyle
-  disabled?: boolean
   maxDuration?: {
     hours: number
     minutes: number
   }
+  disabled?: boolean
 }
 
 export function DurationPicker({ 
-  hours, 
-  minutes, 
-  onChangeHours, 
+  hours,
+  minutes,
+  onChangeHours,
   onChangeMinutes,
-  style,
+  maxDuration = { hours: 23, minutes: 59 },
   disabled = false,
-  maxDuration = { hours: 23, minutes: 59 }
 }: DurationPickerProps) {
-  const handleChangeHours = (value: string) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const expandAnim = useState(new Animated.Value(0))[0]
+
+  const handleToggle = () => {
+    if (disabled) return
+    
+    const toValue = isExpanded ? 0 : 1
+    setIsExpanded(!isExpanded)
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-    onChangeHours(value)
+    
+    Animated.timing(expandAnim, {
+      toValue,
+      duration: 300,
+      useNativeDriver: false,
+    }).start()
+  }
+
+  const handleChangeHours = (value: string) => {
+    if (value) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+      onChangeHours(value)
+    }
   }
 
   const handleChangeMinutes = (value: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-    onChangeMinutes(value)
+    if (value) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+      onChangeMinutes(value.padStart(2, '0'))
+    }
   }
 
-  const hourValues = Array.from(
-    { length: maxDuration.hours + 1 }, 
-    (_, i) => i.toString()
+  const hourItems = Array.from(
+    { length: maxDuration.hours + 1 },
+    (_, i) => ({
+      label: `${i} hour${i !== 1 ? 's' : ''}`,
+      value: i.toString(),
+    })
   )
 
-  const minuteValues = Array.from(
-    { length: maxDuration.minutes + 1 }, 
-    (_, i) => i.toString().padStart(2, "0")
+  const minuteItems = Array.from(
+    { length: maxDuration.minutes + 1 },
+    (_, i) => ({
+      label: `${i} min`,
+      value: i.toString().padStart(2, '0'),
+    })
   )
 
   return (
-    <View style={[styles.container, style]}>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={hours}
-          onValueChange={handleChangeHours}
-          style={styles.picker}
-          enabled={!disabled}
-          accessibilityLabel="Select hours"
-          accessibilityHint="Choose the number of hours"
-        >
-          {hourValues.map((value) => (
-            <Picker.Item 
-              key={value} 
-              label={`${value} ${value === "1" ? "hour" : "hours"}`}
-              value={value}
-            />
-          ))}
-        </Picker>
-      </View>
+    <View style={styles.container}>
+      <TouchableOpacity 
+        onPress={handleToggle}
+        style={styles.button}
+        disabled={disabled}
+      >
+        <View style={styles.header}>
+          <Text style={styles.title}>Duration</Text>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{hours}h {minutes}m</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
 
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={minutes}
-          onValueChange={handleChangeMinutes}
-          style={styles.picker}
-          enabled={!disabled}
-          accessibilityLabel="Select minutes"
-          accessibilityHint="Choose the number of minutes"
-        >
-          {minuteValues.map((value) => (
-            <Picker.Item 
-              key={value} 
-              label={`${parseInt(value)} ${value === "01" ? "minute" : "minutes"}`}
-              value={value}
+      <Animated.View style={[
+        styles.pickerContainer,
+        {
+          maxHeight: expandAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 200]
+          }),
+          opacity: expandAnim
+        }
+      ]}>
+        <View style={styles.pickersRow}>
+          <View style={styles.pickerWrapper}>
+            <RNPickerSelect
+              value={hours}
+              onValueChange={handleChangeHours}
+              items={hourItems}
+              style={pickerSelectStyles}
+              useNativeAndroidPickerStyle={false}
             />
-          ))}
-        </Picker>
-      </View>
+          </View>
+
+          <View style={styles.pickerWrapper}>
+            <RNPickerSelect
+              value={minutes}
+              onValueChange={handleChangeMinutes}
+              items={minuteItems}
+              style={pickerSelectStyles}
+              useNativeAndroidPickerStyle={false}
+            />
+          </View>
+        </View>
+      </Animated.View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    overflow: "hidden",
+    marginVertical: 8,
+  },
+  button: {
+    width: "100%",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000000",
+  },
+  badge: {
+    backgroundColor: "#B17F4A",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  badgeText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  pickerContainer: {
+    backgroundColor: "#f8f9fa",
+    overflow: "hidden",
+  },
+  pickersRow: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-    padding: 8,
+    paddingVertical: 10,
   },
-  pickerContainer: {
+  pickerWrapper: {
     flex: 1,
     alignItems: "center",
   },
-  picker: {
-    width: "100%",
-    height: 120,
+})
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    color: '#000000',
+    textAlign: 'center',
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    color: '#000000',
+    textAlign: 'center',
   },
 }) 
