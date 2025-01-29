@@ -5,7 +5,7 @@ import { Card } from "@/components/Card"
 import { Button } from "@/components/ui/Button"
 import { GridSelector, type GridOption } from "@/components/forms/GridSelector"
 import { ScaleSelector } from "@/components/forms/ScaleSelector"
-import { DateTimePicker } from "@/components/forms/DateTimePicker"
+import { DatePicker } from "@/components/forms/DatePicker"
 import { DurationPicker } from "@/components/forms/DurationPicker"
 import { TimePicker } from "@/components/forms/TimePicker"
 import { useTheme } from "@/hooks/useTheme"
@@ -147,7 +147,7 @@ export default function Home() {
 
           <Text style={styles.sectionTitle}>Date & Duration</Text>
           <View style={styles.dateTimeSection}>
-            <DateTimePicker
+            <DatePicker
               selectedDate={selectedDate}
               onDateChange={handleDateChange}
             >
@@ -155,7 +155,7 @@ export default function Home() {
                 selectedDate={selectedDate}
                 onTimeChange={handleTimeChange}
               />
-            </DateTimePicker>
+            </DatePicker>
             <DurationPicker
               minutes={newSession.minutes}
               onChangeMinutes={(value) => setNewSession({ ...newSession, minutes: value })}

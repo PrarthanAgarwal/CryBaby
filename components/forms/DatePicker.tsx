@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 
-interface DateTimePickerProps {
+interface DatePickerProps {
   selectedDate?: Date;
   onDateChange: (date: Date) => void;
   disabled?: boolean;
@@ -32,12 +32,12 @@ const isSameDay = (date1: Date, date2: Date): boolean => {
          date1.getFullYear() === date2.getFullYear();
 };
 
-export function DateTimePicker({
+export function DatePicker({
   selectedDate: selectedDateProp,
   onDateChange,
   disabled = false,
   children,
-}: DateTimePickerProps) {
+}: DatePickerProps) {
   const theme = useTheme();
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(selectedDateProp || new Date());
