@@ -5,7 +5,9 @@ import { Card } from "@/components/Card"
 import { Button } from "@/components/ui/Button"
 import { GridSelector, type GridOption } from "@/components/forms/GridSelector"
 import { ScaleSelector } from "@/components/forms/ScaleSelector"
+import { DateTimePicker } from "@/components/forms/DateTimePicker"
 import { DurationPicker } from "@/components/forms/DurationPicker"
+import { TimePicker } from "@/components/forms/TimePicker"
 import { useTheme } from "@/hooks/useTheme"
 
 const reasonOptions: GridOption[] = [
@@ -39,14 +41,28 @@ export default function Home() {
     name: "",
     reason: null as string | null,
     volume: null as string | null,
+    startedAt: new Date(),
     minutes: "00",
     satisfaction: null as string | null,
     notes: "",
   })
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
   const handleSave = () => {
     // TODO: Implement save logic
     console.log('Saving session:', newSession)
+  }
+
+  const handleDateChange = (date: Date) => {
+    // Preserve the current time when changing date
+    const newDate = new Date(date)
+    newDate.setHours(selectedDate.getHours())
+    newDate.setMinutes(selectedDate.getMinutes())
+    setSelectedDate(newDate)
+  }
+
+  const handleTimeChange = (date: Date) => {
+    setSelectedDate(date)
   }
 
   const styles = StyleSheet.create({
@@ -88,6 +104,16 @@ export default function Home() {
     saveButton: {
       marginTop: theme.spacing.xl,
     },
+    dateTimeSection: {
+      gap: theme.spacing.sm,
+    },
+    dateTimeRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    pickerContainer: {
+      gap: theme.spacing.sm,
+    },
   })
 
   return (
@@ -119,11 +145,22 @@ export default function Home() {
             onSelect={(value) => setNewSession({ ...newSession, volume: value })}
           />
 
-          <Text style={styles.sectionTitle}>Duration</Text>
-          <DurationPicker
-            minutes={newSession.minutes}
-            onChangeMinutes={(value) => setNewSession({ ...newSession, minutes: value })}
-          />
+          <Text style={styles.sectionTitle}>Date & Duration</Text>
+          <View style={styles.dateTimeSection}>
+            <DateTimePicker
+              selectedDate={selectedDate}
+              onDateChange={handleDateChange}
+            >
+              <TimePicker
+                selectedDate={selectedDate}
+                onTimeChange={handleTimeChange}
+              />
+            </DateTimePicker>
+            <DurationPicker
+              minutes={newSession.minutes}
+              onChangeMinutes={(value) => setNewSession({ ...newSession, minutes: value })}
+            />
+          </View>
 
           <Text style={styles.sectionTitle}>Satisfaction</Text>
           <ScaleSelector

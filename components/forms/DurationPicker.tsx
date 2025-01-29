@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, Animated, ScrollView, NativeScrollEvent, NativeSyntheticEvent, Modal, TouchableWithoutFeedback } from "react-native"
 import * as Haptics from 'expo-haptics'
+import { useTheme } from '@/hooks/useTheme'
 
 interface DurationPickerProps {
   minutes: string
@@ -28,6 +29,7 @@ export function DurationPicker({
   onChangeMinutes,
   disabled = false,
 }: DurationPickerProps) {
+  const theme = useTheme()
   const [isExpanded, setIsExpanded] = useState(false)
   const [isInitialScroll, setIsInitialScroll] = useState(true)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -70,6 +72,91 @@ export function DurationPicker({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     handleScroll(event)
   }
+
+  const styles = StyleSheet.create({
+    container: {
+      overflow: "hidden",
+    },
+    button: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingVertical: theme.spacing.sm,
+    },
+    buttonDisabled: {
+      opacity: 0.5,
+    },
+    title: {
+      fontSize: theme.typography.fontSize.base,
+      fontFamily: theme.typography.fonts.medium,
+      color: theme.colors.text.primary,
+    },
+    badge: {
+      backgroundColor: theme.colors.primary[500],
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.xs,
+      borderRadius: theme.borderRadius.full,
+    },
+    badgeText: {
+      color: theme.colors.text.inverse,
+      fontSize: theme.typography.fontSize.base,
+      fontFamily: theme.typography.fonts.medium,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    pickerModal: {
+      backgroundColor: theme.colors.background.primary,
+      borderRadius: theme.borderRadius.lg,
+      width: '80%',
+      maxHeight: ITEM_HEIGHT * VISIBLE_ITEMS,
+      overflow: 'hidden',
+      ...theme.shadows.lg,
+    },
+    pickerWrapper: {
+      position: 'relative',
+      height: ITEM_HEIGHT * VISIBLE_ITEMS,
+    },
+    selectionOverlay: {
+      position: 'absolute',
+      top: ITEM_HEIGHT * 2,
+      left: 0,
+      right: 0,
+      height: ITEM_HEIGHT,
+      backgroundColor: 'rgba(200, 200, 255, 0.15)',
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      borderColor: theme.colors.primary[200],
+      zIndex: 1,
+    },
+    scrollContent: {
+      paddingHorizontal: theme.spacing.md,
+    },
+    pickerItem: {
+      height: ITEM_HEIGHT,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    pickerItemText: {
+      fontSize: theme.typography.fontSize.base,
+      fontFamily: theme.typography.fonts.regular,
+      color: theme.colors.text.secondary,
+      zIndex: 2,
+    },
+    pickerItemTextSelected: {
+      fontSize: theme.typography.fontSize.lg,
+      fontFamily: theme.typography.fonts.medium,
+      color: theme.colors.text.primary,
+      zIndex: 2,
+    },
+    pickerItemHighlighted: {
+      backgroundColor: 'rgba(200, 200, 255, 0.1)',
+      zIndex: 2,
+    },
+  })
 
   return (
     <View style={styles.container}>
@@ -131,6 +218,7 @@ export function DurationPicker({
                             animated: true
                           });
                           onChangeMinutes(i.toString().padStart(2, '0'));
+                          togglePicker();
                         }}
                         style={[
                           styles.pickerItem,
@@ -155,97 +243,4 @@ export function DurationPicker({
       </Modal>
     </View>
   )
-}
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#ffffff",
-    borderRadius: 8,
-    overflow: "hidden",
-    marginVertical: 8,
-  },
-  button: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    backgroundColor: "#ffffff",
-  },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
-  title: {
-    fontSize: 18,
-    fontFamily: "Inter_600SemiBold",
-    color: "#1f2937",
-  },
-  badge: {
-    backgroundColor: "#B17F4A",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  badgeText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontFamily: "Inter_500Medium",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  pickerModal: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    width: '80%',
-    maxHeight: ITEM_HEIGHT * VISIBLE_ITEMS,
-    overflow: 'hidden',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  pickerWrapper: {
-    position: 'relative',
-    height: ITEM_HEIGHT * VISIBLE_ITEMS,
-  },
-  selectionOverlay: {
-    position: 'absolute',
-    top: ITEM_HEIGHT * 2,
-    left: 0,
-    right: 0,
-    height: ITEM_HEIGHT,
-    backgroundColor: 'rgba(248, 250, 252, 0.8)',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#e2e8f0',
-    zIndex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: 16,
-  },
-  pickerItem: {
-    height: ITEM_HEIGHT,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  pickerItemText: {
-    fontSize: 16,
-    fontFamily: "Inter_400Regular",
-    color: "#6b7280",
-  },
-  pickerItemTextSelected: {
-    fontSize: 18,
-    fontFamily: "Inter_500Medium",
-    color: "#1f2937",
-  },
-  pickerItemHighlighted: {
-    backgroundColor: 'rgba(248, 250, 252, 0.3)',
-  },
-}) 
+} 
