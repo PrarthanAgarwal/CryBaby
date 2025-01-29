@@ -81,13 +81,13 @@ export default function Settings() {
               style={[styles.modalButton, styles.cancelButton]}
               onPress={() => setShowDeleteModal(false)}
             >
-              <Text style={styles.modalButtonText}>Cancel</Text>
+              <Text style={[styles.modalButtonText, { color: theme.colors.text.secondary }]}>Cancel</Text>
             </Pressable>
             <Pressable
               style={[styles.modalButton, styles.deleteModalButton]}
               onPress={handleDeleteAccount}
             >
-              <Text style={[styles.modalButtonText, { color: theme.colors.error.DEFAULT }]}>Delete Account</Text>
+              <Text style={[styles.modalButtonText, { color: theme.colors.semantic.error }]}>Delete Account</Text>
             </Pressable>
           </View>
         </View>
@@ -178,8 +178,10 @@ export default function Settings() {
               style={[styles.settingRow, styles.deleteButton]}
               onPress={() => setShowDeleteModal(true)}
             >
-              <Icon name="trash-2" size={20} color={theme.colors.error.DEFAULT} />
-              <Text style={[styles.buttonText, { color: theme.colors.error.DEFAULT }]}>Delete Account</Text>
+              <View style={styles.settingLeft}>
+                <Icon name="trash-2" size={20} color={theme.colors.semantic.error} />
+                <Text style={[styles.buttonText, { color: theme.colors.semantic.error }]}>Delete Account</Text>
+              </View>
             </Pressable>
           </Card>
         </View>

@@ -31,8 +31,10 @@ export function GridSelector({
     onSelect(value)
   }
 
+  const itemWidth = columns === 2 ? '48%' : '31%'
+
   return (
-    <View style={[styles.grid, { flexDirection: "row", flexWrap: "wrap" }, style]}>
+    <View style={[styles.grid, style]}>
       {options.map((option) => {
         const isSelected = selected === option.value
         return (
@@ -40,7 +42,7 @@ export function GridSelector({
             key={option.value}
             style={[
               styles.item,
-              { width: `${100 / columns}%` },
+              { width: itemWidth },
               isSelected && styles.selectedItem,
               disabled && styles.disabledItem
             ]}
@@ -73,7 +75,10 @@ export function GridSelector({
 
 const styles = StyleSheet.create({
   grid: {
-    marginHorizontal: -4,
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
   },
   item: {
     padding: 12,
@@ -83,7 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 1,
     borderColor: "#e2e8f0",
-    margin: 4,
+    width: '48%',
   },
   selectedItem: {
     backgroundColor: "#bfdbfe",

@@ -67,11 +67,147 @@ export default function Achievements() {
     </View>
   )
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background.primary,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    header: {
+      padding: theme.spacing.md,
+    },
+    title: {
+      fontSize: theme.typography.fontSize['2xl'],
+      fontWeight: theme.typography.fontWeight.bold,
+      color: theme.colors.primary[500],
+      marginBottom: theme.spacing.sm,
+    },
+    subtitle: {
+      fontSize: theme.typography.fontSize.base,
+      color: theme.colors.text.secondary,
+      marginBottom: theme.spacing.lg,
+    },
+    filterContainer: {
+      flexDirection: 'row',
+      marginBottom: theme.spacing.md,
+      padding: theme.spacing.sm,
+      backgroundColor: theme.colors.secondary[100],
+      borderRadius: theme.borderRadius.full,
+    },
+    filterButton: {
+      flex: 1,
+      paddingVertical: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
+      borderRadius: theme.borderRadius.full,
+    },
+    filterButtonActive: {
+      backgroundColor: theme.colors.background.primary,
+    },
+    filterText: {
+      color: theme.colors.text.secondary,
+      fontSize: theme.typography.fontSize.sm,
+      fontWeight: theme.typography.fontWeight.medium,
+    },
+    filterTextActive: {
+      color: theme.colors.primary[500],
+    },
+    achievementsList: {
+      padding: theme.spacing.md,
+    },
+    achievementCard: {
+      marginBottom: theme.spacing.sm,
+      padding: theme.spacing.md,
+    },
+    achievementHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    achievementIcon: {
+      width: 40,
+      height: 40,
+      borderRadius: theme.borderRadius.full,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: theme.spacing.sm,
+    },
+    achievementInfo: {
+      flex: 1,
+    },
+    achievementName: {
+      fontSize: theme.typography.fontSize.base,
+      fontWeight: theme.typography.fontWeight.semibold,
+      marginBottom: theme.spacing.xs,
+    },
+    achievementDescription: {
+      fontSize: theme.typography.fontSize.sm,
+      color: theme.colors.text.secondary,
+      marginBottom: theme.spacing.sm,
+    },
+    achievementProgress: {
+      marginTop: theme.spacing.sm,
+    },
+    progressCount: {
+      fontSize: theme.typography.fontSize.xs,
+      color: theme.colors.text.secondary,
+      textAlign: 'right',
+      marginTop: theme.spacing.xs,
+    },
+    unlockedDate: {
+      fontSize: theme.typography.fontSize.xs,
+      color: theme.colors.text.secondary,
+    },
+    progressBarContainer: {
+      height: 8,
+      backgroundColor: theme.colors.secondary[200],
+      borderRadius: theme.borderRadius.full,
+      overflow: 'hidden',
+    },
+    progressBar: {
+      height: '100%',
+      backgroundColor: theme.colors.primary[500],
+      borderRadius: theme.borderRadius.full,
+    },
+    overallCard: {
+      margin: theme.spacing.md,
+      padding: theme.spacing.md,
+    },
+    cardTitle: {
+      fontSize: theme.typography.fontSize.lg,
+      fontWeight: theme.typography.fontWeight.semibold,
+      marginBottom: theme.spacing.md,
+      color: theme.colors.text.primary,
+    },
+    trophyGrid: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginBottom: theme.spacing.md,
+    },
+    trophyItem: {
+      alignItems: 'center',
+    },
+    trophyCount: {
+      marginTop: theme.spacing.sm,
+      fontSize: theme.typography.fontSize.sm,
+      fontWeight: theme.typography.fontWeight.medium,
+      color: theme.colors.text.primary,
+    },
+    progressText: {
+      textAlign: 'center',
+      color: theme.colors.text.secondary,
+      fontSize: theme.typography.fontSize.sm,
+      marginTop: theme.spacing.sm,
+    },
+  })
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <View style={styles.header}>
         <Text style={styles.title}>Achievements</Text>
-
+        <Text style={styles.subtitle}>Track your emotional journey milestones</Text>
+      </View>
+      <ScrollView style={styles.scrollView}>
         <Card style={styles.overallCard}>
           <Text style={styles.cardTitle}>Overall Progress</Text>
           <View style={styles.trophyGrid}>
@@ -163,129 +299,4 @@ export default function Achievements() {
       </ScrollView>
     </SafeAreaView>
   )
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fdfbf1',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3b82f6',
-    textAlign: 'center',
-    marginVertical: 16,
-  },
-  overallCard: {
-    margin: 16,
-    padding: 16,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  trophyGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 16,
-  },
-  trophyItem: {
-    alignItems: 'center',
-  },
-  trophyCount: {
-    marginTop: 8,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  progressBarContainer: {
-    height: 8,
-    backgroundColor: '#E5E7EB',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '100%',
-    backgroundColor: '#3b82f6',
-    borderRadius: 4,
-  },
-  progressText: {
-    textAlign: 'center',
-    color: '#6B7280',
-    fontSize: 14,
-    marginTop: 8,
-  },
-  filterContainer: {
-    flexDirection: 'row',
-    margin: 16,
-    backgroundColor: '#E5E7EB',
-    borderRadius: 8,
-    padding: 4,
-  },
-  filterButton: {
-    flex: 1,
-    paddingVertical: 8,
-    alignItems: 'center',
-    borderRadius: 6,
-  },
-  filterButtonActive: {
-    backgroundColor: '#FFFFFF',
-  },
-  filterText: {
-    color: '#6B7280',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  filterTextActive: {
-    color: '#3b82f6',
-  },
-  achievementsList: {
-    padding: 16,
-  },
-  achievementCard: {
-    marginBottom: 12,
-    padding: 16,
-  },
-  achievementHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  achievementIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  achievementInfo: {
-    flex: 1,
-  },
-  achievementName: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  achievementDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 8,
-  },
-  achievementProgress: {
-    marginTop: 8,
-  },
-  progressCount: {
-    fontSize: 12,
-    color: '#6B7280',
-    textAlign: 'right',
-    marginTop: 4,
-  },
-  unlockedDate: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-}) 
+} 

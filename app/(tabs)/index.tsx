@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Card } from "@/components/Card"
 import { Button } from "@/components/ui/Button"
 import { GridSelector, type GridOption } from "@/components/forms/GridSelector"
+import { ScaleSelector } from "@/components/forms/ScaleSelector"
 import { DurationPicker } from "@/components/forms/DurationPicker"
 import { useTheme } from "@/hooks/useTheme"
 
@@ -38,7 +39,6 @@ export default function Home() {
     name: "",
     reason: null as string | null,
     volume: null as string | null,
-    hours: "0",
     minutes: "00",
     satisfaction: null as string | null,
     notes: "",
@@ -48,6 +48,47 @@ export default function Home() {
     // TODO: Implement save logic
     console.log('Saving session:', newSession)
   }
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background.primary,
+    },
+    title: {
+      fontSize: theme.typography.fontSize['2xl'],
+      fontFamily: 'Inter_700Bold',
+      marginVertical: theme.spacing.md,
+      textAlign: 'center',
+      color: theme.colors.primary[500],
+    },
+    card: {
+      margin: theme.spacing.md,
+      padding: theme.spacing.md,
+    },
+    sectionTitle: {
+      fontSize: theme.typography.fontSize.lg,
+      fontFamily: 'Inter_600SemiBold',
+      marginBottom: theme.spacing.sm,
+      marginTop: theme.spacing.lg,
+      color: theme.colors.text.primary,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: theme.colors.secondary[200],
+      borderRadius: theme.borderRadius.md,
+      padding: theme.spacing.sm,
+      fontSize: theme.typography.fontSize.base,
+      fontFamily: 'Inter_400Regular',
+      backgroundColor: theme.colors.background.primary,
+    },
+    textArea: {
+      height: 100,
+      textAlignVertical: 'top',
+    },
+    saveButton: {
+      marginTop: theme.spacing.xl,
+    },
+  })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,28 +113,23 @@ export default function Home() {
           />
 
           <Text style={styles.sectionTitle}>Volume</Text>
-          <GridSelector
+          <ScaleSelector
             options={volumeOptions}
             selected={newSession.volume}
             onSelect={(value) => setNewSession({ ...newSession, volume: value })}
-            columns={3}
           />
 
           <Text style={styles.sectionTitle}>Duration</Text>
           <DurationPicker
-            hours={newSession.hours}
             minutes={newSession.minutes}
-            onChangeHours={(value) => setNewSession({ ...newSession, hours: value })}
             onChangeMinutes={(value) => setNewSession({ ...newSession, minutes: value })}
-            maxDuration={{ hours: 23, minutes: 59 }}
           />
 
           <Text style={styles.sectionTitle}>Satisfaction</Text>
-          <GridSelector
+          <ScaleSelector
             options={satisfactionOptions}
             selected={newSession.satisfaction}
             onSelect={(value) => setNewSession({ ...newSession, satisfaction: value })}
-            columns={3}
           />
 
           <Text style={styles.sectionTitle}>Additional notes</Text>
@@ -119,44 +155,4 @@ export default function Home() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fdfbf1",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 16,
-    textAlign: "center",
-    color: "#3b82f6",
-  },
-  card: {
-    margin: 16,
-    padding: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 12,
-    marginTop: 20,
-    color: "#1f2937",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: "#ffffff",
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: "top",
-  },
-  saveButton: {
-    marginTop: 24,
-  },
-})
 

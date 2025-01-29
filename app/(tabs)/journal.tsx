@@ -45,6 +45,107 @@ export default function Journal() {
     setSelectedSession(session || null)
   }
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background.primary,
+    },
+    title: {
+      fontSize: theme.typography.fontSize['2xl'],
+      fontWeight: theme.typography.fontWeight.bold,
+      color: theme.colors.primary[500],
+      textAlign: 'center',
+      marginVertical: theme.spacing.md,
+    },
+    calendarCard: {
+      margin: theme.spacing.md,
+      padding: theme.spacing.md,
+    },
+    monthHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: theme.spacing.md,
+    },
+    monthButton: {
+      padding: theme.spacing.sm,
+    },
+    monthText: {
+      fontSize: theme.typography.fontSize.lg,
+      fontWeight: theme.typography.fontWeight.semibold,
+      color: theme.colors.text.primary,
+    },
+    weekDays: {
+      flexDirection: 'row',
+      marginBottom: theme.spacing.sm,
+    },
+    weekDayText: {
+      flex: 1,
+      textAlign: 'center',
+      color: theme.colors.text.secondary,
+      fontSize: theme.typography.fontSize.sm,
+      fontWeight: theme.typography.fontWeight.medium,
+    },
+    daysGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    dayCell: {
+      width: `${100 / 7}%`,
+      aspectRatio: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: theme.spacing.xs,
+    },
+    dayText: {
+      fontSize: theme.typography.fontSize.base,
+      color: theme.colors.text.primary,
+    },
+    selectedDay: {
+      backgroundColor: theme.colors.primary[500],
+      borderRadius: theme.borderRadius.md,
+    },
+    selectedDayText: {
+      color: theme.colors.background.primary,
+      fontWeight: theme.typography.fontWeight.semibold,
+    },
+    sessionDot: {
+      width: 6,
+      height: 6,
+      borderRadius: theme.borderRadius.full,
+      backgroundColor: theme.colors.primary[500],
+      marginTop: theme.spacing['2xs'],
+    },
+    selectedSessionDot: {
+      backgroundColor: theme.colors.background.primary,
+    },
+    sessionInfo: {
+      marginTop: theme.spacing.md,
+      paddingTop: theme.spacing.md,
+      borderTopWidth: 1,
+      borderTopColor: theme.colors.secondary[200],
+    },
+    sessionDate: {
+      fontSize: theme.typography.fontSize.base,
+      fontWeight: theme.typography.fontWeight.semibold,
+      color: theme.colors.text.primary,
+      marginBottom: theme.spacing.sm,
+    },
+    sessionDetails: {
+      flexDirection: 'row',
+      gap: theme.spacing.md,
+    },
+    sessionDetail: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.sm,
+    },
+    sessionDetailText: {
+      fontSize: theme.typography.fontSize.sm,
+      color: theme.colors.text.secondary,
+    },
+  })
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -138,105 +239,4 @@ export default function Journal() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fdfbf1",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#3b82f6",
-    textAlign: "center",
-    marginVertical: 16,
-  },
-  calendarCard: {
-    margin: 16,
-    padding: 16,
-  },
-  monthHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  monthButton: {
-    padding: 8,
-  },
-  monthText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1f2937',
-  },
-  weekDays: {
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  weekDayText: {
-    flex: 1,
-    textAlign: 'center',
-    color: '#6b7280',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  daysGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  dayCell: {
-    width: `${100 / 7}%`,
-    aspectRatio: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 4,
-  },
-  dayText: {
-    fontSize: 16,
-    color: '#1f2937',
-  },
-  selectedDay: {
-    backgroundColor: '#3b82f6',
-    borderRadius: 8,
-  },
-  selectedDayText: {
-    color: '#ffffff',
-    fontWeight: '600',
-  },
-  sessionDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#3b82f6',
-    marginTop: 2,
-  },
-  selectedSessionDot: {
-    backgroundColor: '#ffffff',
-  },
-  sessionInfo: {
-    marginTop: 16,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
-  },
-  sessionDate: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 8,
-  },
-  sessionDetails: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  sessionDetail: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  sessionDetailText: {
-    fontSize: 14,
-    color: '#6b7280',
-  },
-})
 
