@@ -43,3 +43,5 @@ To improve the app's appearance, I would recommend:
    - More sophisticated layouts
    - Better use of typography to create visual interest
    - Custom illustrations or icons
+
+

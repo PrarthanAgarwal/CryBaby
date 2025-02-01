@@ -229,7 +229,7 @@ export function DurationPicker({
                           styles.pickerItemText,
                           minutes === i.toString().padStart(2, '0') && styles.pickerItemTextSelected
                         ]}>
-                          {i}min
+                          {i} min
                         </Text>
                       </TouchableOpacity>
                     ))}

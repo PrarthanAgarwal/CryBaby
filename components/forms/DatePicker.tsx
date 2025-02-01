@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
+import { format, subDays, isSameDay, startOfToday, getDay } from 'date-fns';
 
 interface DatePickerProps {
   selectedDate?: Date;
@@ -10,27 +11,6 @@ interface DatePickerProps {
 }
 
 const DAYS_OF_WEEK = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-// Simple date utilities
-const formatDate = (date: Date): string => {
-  const day = date.getDate();
-  const month = MONTHS[date.getMonth()];
-  const year = date.getFullYear();
-  return `${month} ${day}, ${year}`;
-};
-
-const subDays = (date: Date, days: number): Date => {
-  const newDate = new Date(date);
-  newDate.setDate(date.getDate() - days);
-  return newDate;
-};
-
-const isSameDay = (date1: Date, date2: Date): boolean => {
-  return date1.getDate() === date2.getDate() &&
-         date1.getMonth() === date2.getMonth() &&
-         date1.getFullYear() === date2.getFullYear();
-};
 
 export function DatePicker({
   selectedDate: selectedDateProp,
@@ -40,8 +20,8 @@ export function DatePicker({
 }: DatePickerProps) {
   const theme = useTheme();
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(selectedDateProp || new Date());
-  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState<Date>(selectedDateProp || startOfToday());
+  const today = startOfToday();
   const sevenDaysAgo = subDays(today, 7);
 
   // Update internal state when prop changes
@@ -54,7 +34,7 @@ export function DatePicker({
   // Initialize with current date if no date provided
   useEffect(() => {
     if (!selectedDateProp) {
-      const now = new Date();
+      const now = startOfToday();
       setSelectedDate(now);
       onDateChange(now);
     }
@@ -66,9 +46,8 @@ export function DatePicker({
   };
 
   const handleDateChange = (date: Date) => {
-    const newDate = new Date(date);
-    setSelectedDate(newDate);
-    onDateChange(newDate);
+    setSelectedDate(date);
+    onDateChange(date);
   };
 
   // Generate dates for the week view
@@ -78,8 +57,8 @@ export function DatePicker({
       const date = subDays(today, i);
       dates.push({
         date,
-        dayName: DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1],
-        dayNumber: date.getDate().toString(),
+        dayName: DAYS_OF_WEEK[getDay(date) === 0 ? 6 : getDay(date) - 1],
+        dayNumber: format(date, 'd'),
         isSelectable: date >= sevenDaysAgo && date <= today,
       });
     }
@@ -214,7 +193,9 @@ export function DatePicker({
               disabled && styles.buttonDisabled
             ]}
           >
-            <Text style={styles.badgeText}>{formatDate(selectedDate)}</Text>
+            <Text style={styles.badgeText}>
+              {format(selectedDate, 'MMM d, yyyy')}
+            </Text>
           </TouchableOpacity>
           {children}
         </View>
@@ -233,7 +214,9 @@ export function DatePicker({
                 <View style={styles.dateSection}>
                   <Text style={styles.sectionTitle}>Select Date</Text>
                   <View style={styles.dateDisplay}>
-                    <Text style={styles.selectedDate}>{formatDate(selectedDate)}</Text>
+                    <Text style={styles.selectedDate}>
+                      {format(selectedDate, 'MMM d, yyyy')}
+                    </Text>
                   </View>
 
                   <View style={styles.calendar}>

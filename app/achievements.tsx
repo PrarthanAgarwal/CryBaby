@@ -83,11 +83,13 @@ export default function Achievements() {
       fontWeight: theme.typography.fontWeight.bold,
       color: theme.colors.primary[500],
       marginBottom: theme.spacing.sm,
+      fontFamily: theme.typography.fonts.bold,
     },
     subtitle: {
       fontSize: theme.typography.fontSize.base,
       color: theme.colors.text.secondary,
       marginBottom: theme.spacing.lg,
+      fontFamily: theme.typography.fonts.regular,
     },
     filterContainer: {
       flexDirection: 'row',
@@ -109,6 +111,7 @@ export default function Achievements() {
       color: theme.colors.text.secondary,
       fontSize: theme.typography.fontSize.sm,
       fontWeight: theme.typography.fontWeight.medium,
+      fontFamily: theme.typography.fonts.medium,
     },
     filterTextActive: {
       color: theme.colors.primary[500],
@@ -139,11 +142,13 @@ export default function Achievements() {
       fontSize: theme.typography.fontSize.base,
       fontWeight: theme.typography.fontWeight.semibold,
       marginBottom: theme.spacing.xs,
+      fontFamily: theme.typography.fonts.semibold,
     },
     achievementDescription: {
       fontSize: theme.typography.fontSize.sm,
       color: theme.colors.text.secondary,
       marginBottom: theme.spacing.sm,
+      fontFamily: theme.typography.fonts.regular,
     },
     achievementProgress: {
       marginTop: theme.spacing.sm,
@@ -153,10 +158,12 @@ export default function Achievements() {
       color: theme.colors.text.secondary,
       textAlign: 'right',
       marginTop: theme.spacing.xs,
+      fontFamily: theme.typography.fonts.regular,
     },
     unlockedDate: {
       fontSize: theme.typography.fontSize.xs,
       color: theme.colors.text.secondary,
+      fontFamily: theme.typography.fonts.regular,
     },
     progressBarContainer: {
       height: 8,
@@ -178,6 +185,7 @@ export default function Achievements() {
       fontWeight: theme.typography.fontWeight.semibold,
       marginBottom: theme.spacing.md,
       color: theme.colors.text.primary,
+      fontFamily: theme.typography.fonts.semibold,
     },
     trophyGrid: {
       flexDirection: 'row',
@@ -192,12 +200,14 @@ export default function Achievements() {
       fontSize: theme.typography.fontSize.sm,
       fontWeight: theme.typography.fontWeight.medium,
       color: theme.colors.text.primary,
+      fontFamily: theme.typography.fonts.medium,
     },
     progressText: {
       textAlign: 'center',
       color: theme.colors.text.secondary,
       fontSize: theme.typography.fontSize.sm,
       marginTop: theme.spacing.sm,
+      fontFamily: theme.typography.fonts.regular,
     },
   })
 

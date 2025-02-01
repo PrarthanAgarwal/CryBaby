@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, Switch, Pressable, Modal } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Switch, Pressable, Modal, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useRouter } from 'expo-router'
 import { Card } from '@/components/Card'
 import { useTheme } from '@/hooks/useTheme'
 import Icon from 'react-native-vector-icons/Feather'
 
 export default function Settings() {
   const theme = useTheme()
+  const router = useRouter()
   const [showAboutModal, setShowAboutModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light')
@@ -29,12 +31,20 @@ export default function Settings() {
   }
 
   const handleLogout = () => {
-    // TODO: Implement logout logic
+    Alert.alert(
+      'Logout',
+      'This is a demo version. Logout is not implemented.',
+      [{ text: 'OK' }]
+    )
   }
 
   const handleDeleteAccount = () => {
     setShowDeleteModal(false)
-    // TODO: Implement account deletion logic
+    Alert.alert(
+      'Delete Account',
+      'This is a demo version. Account deletion is not implemented.',
+      [{ text: 'OK' }]
+    )
   }
 
   const renderAboutModal = () => (
@@ -94,6 +104,132 @@ export default function Settings() {
       </View>
     </Modal>
   )
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background.primary,
+    },
+    title: {
+      fontSize: theme.typography.fontSize['2xl'],
+      fontWeight: theme.typography.fontWeight.bold,
+      color: theme.colors.primary[500],
+      textAlign: 'center',
+      marginVertical: theme.spacing.md,
+      fontFamily: theme.typography.fonts.bold,
+    },
+    section: {
+      padding: 16,
+    },
+    settingCard: {
+      marginBottom: 12,
+    },
+    settingRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 16,
+    },
+    settingLeft: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    settingLabel: {
+      fontSize: theme.typography.fontSize.base,
+      marginLeft: theme.spacing.sm,
+      fontFamily: theme.typography.fonts.regular,
+    },
+    languageSelector: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    languageText: {
+      fontSize: theme.typography.fontSize.base,
+      marginRight: theme.spacing.sm,
+      color: theme.colors.text.secondary,
+      fontFamily: theme.typography.fonts.regular,
+    },
+    logoutButton: {
+      justifyContent: 'center',
+    },
+    deleteButton: {
+      justifyContent: 'center',
+    },
+    buttonText: {
+      fontSize: theme.typography.fontSize.base,
+      marginLeft: theme.spacing.sm,
+      fontFamily: theme.typography.fonts.medium,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      borderRadius: 12,
+      padding: 24,
+      width: '90%',
+      maxWidth: 400,
+    },
+    modalTitle: {
+      fontSize: theme.typography.fontSize.xl,
+      fontWeight: theme.typography.fontWeight.bold,
+      marginBottom: theme.spacing.md,
+      fontFamily: theme.typography.fonts.bold,
+    },
+    modalText: {
+      fontSize: theme.typography.fontSize.base,
+      color: theme.colors.text.secondary,
+      marginBottom: theme.spacing.md,
+      lineHeight: theme.typography.lineHeight.relaxed,
+      fontFamily: theme.typography.fonts.regular,
+    },
+    versionText: {
+      fontSize: theme.typography.fontSize.sm,
+      color: theme.colors.text.secondary,
+      marginBottom: theme.spacing.sm,
+      fontFamily: theme.typography.fonts.regular,
+    },
+    copyrightText: {
+      fontSize: theme.typography.fontSize.sm,
+      color: theme.colors.text.secondary,
+      fontFamily: theme.typography.fonts.regular,
+    },
+    modalButtons: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      marginTop: 24,
+    },
+    modalButton: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 6,
+      marginLeft: 12,
+    },
+    modalCloseButton: {
+      marginTop: 24,
+      alignSelf: 'flex-end',
+    },
+    modalCloseButtonText: {
+      color: theme.colors.primary[500],
+      fontSize: theme.typography.fontSize.base,
+      fontWeight: theme.typography.fontWeight.medium,
+      fontFamily: theme.typography.fonts.medium,
+    },
+    cancelButton: {
+      backgroundColor: '#F3F4F6',
+    },
+    deleteModalButton: {
+      backgroundColor: '#FEE2E2',
+    },
+    modalButtonText: {
+      fontSize: theme.typography.fontSize.sm,
+      fontWeight: theme.typography.fontWeight.medium,
+      fontFamily: theme.typography.fonts.medium,
+    },
+  })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -191,120 +327,4 @@ export default function Settings() {
       {renderDeleteModal()}
     </SafeAreaView>
   )
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fdfbf1',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3b82f6',
-    textAlign: 'center',
-    marginVertical: 16,
-  },
-  section: {
-    padding: 16,
-  },
-  settingCard: {
-    marginBottom: 12,
-  },
-  settingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-  },
-  settingLeft: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  settingLabel: {
-    fontSize: 16,
-    marginLeft: 12,
-  },
-  languageSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  languageText: {
-    fontSize: 16,
-    marginRight: 8,
-    color: '#6B7280',
-  },
-  logoutButton: {
-    justifyContent: 'center',
-  },
-  deleteButton: {
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
-    marginLeft: 12,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 24,
-    width: '90%',
-    maxWidth: 400,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  modalText: {
-    fontSize: 16,
-    color: '#4B5563',
-    marginBottom: 16,
-    lineHeight: 24,
-  },
-  versionText: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 8,
-  },
-  copyrightText: {
-    fontSize: 14,
-    color: '#6B7280',
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 24,
-  },
-  modalButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-    marginLeft: 12,
-  },
-  modalCloseButton: {
-    marginTop: 24,
-    alignSelf: 'flex-end',
-  },
-  modalCloseButtonText: {
-    color: '#3b82f6',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  cancelButton: {
-    backgroundColor: '#F3F4F6',
-  },
-  deleteModalButton: {
-    backgroundColor: '#FEE2E2',
-  },
-  modalButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-}) 
+} 
