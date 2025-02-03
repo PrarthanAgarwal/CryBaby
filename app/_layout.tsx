@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Slot } from 'expo-router'
+import { Stack, useRouter, useSegments } from 'expo-router'
 import { useFonts, 
   Inter_400Regular,
   Inter_500Medium,
@@ -9,10 +9,47 @@ import { useFonts,
 import * as SplashScreen from 'expo-splash-screen'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { useTheme } from '@/hooks/useTheme'
+import { AuthProvider, useAuth } from '../contexts/AuthContext'
 
 SplashScreen.preventAutoHideAsync()
 
-export default function Layout() {
+// Handle authentication state and protected routes
+function RootLayoutNav() {
+  const { user, isLoading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const isAuthScreen = segments[0] === 'login';
+    const isProtectedRoute = segments[0] === '(tabs)' || segments[0] === 'achievements';
+
+    if (!user && isProtectedRoute) {
+      // Redirect to login if not logged in and trying to access protected routes
+      router.replace('/login');
+    } else if (user && isAuthScreen) {
+      // Redirect to home if logged in and trying to access auth screens
+      router.replace('/(tabs)');
+    }
+  }, [user, segments, isLoading]);
+
+  return (
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ 
+        headerShown: false,
+        presentation: 'modal'
+      }} />
+      <Stack.Screen name="achievements" options={{ 
+        title: 'Achievements',
+        presentation: 'modal'
+      }} />
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
   const appTheme = useTheme()
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -45,8 +82,10 @@ export default function Layout() {
   }
 
   return (
-    <NavigationContainer theme={navigationTheme}>
-      <Slot />
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer theme={navigationTheme}>
+        <RootLayoutNav />
+      </NavigationContainer>
+    </AuthProvider>
   )
 } 

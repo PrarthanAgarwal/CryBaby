@@ -1,11 +1,15 @@
 import React from "react"
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native"
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Pressable } from "react-native"
+import { Image } from 'expo-image'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useRouter } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
 import { Card } from "@/components/Card"
 import { useTheme } from "@/hooks/useTheme"
 import { format } from "date-fns"
+import { useAuth } from '../../contexts/AuthContext'
+import { ThemedText } from '../../components/ThemedText'
+import { useThemeColor } from '../../hooks/useThemeColor'
 
 type Achievement = {
   name: string
@@ -36,9 +40,12 @@ const mockUser = {
   avatarUrl: null,
 }
 
-export default function Profile() {
+export default function ProfileScreen() {
   const router = useRouter()
   const theme = useTheme()
+  const { user, signOut } = useAuth()
+  const backgroundColor = useThemeColor({}, 'background')
+  const textColor = useThemeColor({}, 'text')
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -46,18 +53,26 @@ export default function Profile() {
   }
 
   const getUserInitials = () => {
-    if (!mockUser.fullName) return "?"
-    return mockUser.fullName
+    if (!user?.user_metadata?.full_name) return "?"
+    return user.user_metadata.full_name
       .split(" ")
       .map((n: string) => n[0])
       .join("")
       .toUpperCase()
   }
 
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background.primary,
+      backgroundColor: backgroundColor,
       padding: theme.spacing.md,
     },
     header: {
@@ -78,10 +93,10 @@ export default function Profile() {
       marginBottom: theme.spacing.xl,
     },
     avatar: {
-      width: 80,
-      height: 80,
-      borderRadius: 40,
-      marginRight: theme.spacing.md,
+      width: 120,
+      height: 120,
+      borderRadius: 60,
+      marginBottom: 16,
     },
     avatarFallback: {
       width: 80,
@@ -99,10 +114,13 @@ export default function Profile() {
       fontFamily: theme.typography.fonts.bold,
     },
     name: {
-      fontSize: theme.typography.fontSize.xl,
-      fontWeight: theme.typography.fontWeight.bold,
-      color: theme.colors.text.primary,
-      fontFamily: theme.typography.fonts.bold,
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 4,
+    },
+    email: {
+      fontSize: 16,
+      opacity: 0.7,
     },
     joinDate: {
       fontSize: theme.typography.fontSize.sm,
@@ -210,6 +228,25 @@ export default function Profile() {
       marginLeft: theme.spacing.sm,
       fontFamily: theme.typography.fonts.semibold,
     },
+    profileHeader: {
+      alignItems: 'center',
+      marginTop: 20,
+      marginBottom: 40,
+    },
+    settingsContainer: {
+      flex: 1,
+    },
+    signOutButton: {
+      padding: 16,
+      borderRadius: 8,
+      borderWidth: 1,
+      alignItems: 'center',
+      marginTop: 20,
+    },
+    signOutText: {
+      fontSize: 16,
+      fontWeight: '600',
+    },
   })
 
   return (
@@ -222,20 +259,19 @@ export default function Profile() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.profileInfo}>
-          {mockUser.avatarUrl ? (
-            <Image source={{ uri: mockUser.avatarUrl }} style={styles.avatar} />
-          ) : (
-            <View style={styles.avatarFallback}>
-              <Text style={styles.avatarText}>{getUserInitials()}</Text>
-            </View>
-          )}
-          <View>
-            <Text style={styles.name}>{mockUser.fullName}</Text>
-            <Text style={styles.joinDate}>
-              Joined {formatDate(mockUser.joinDate)}
-            </Text>
-          </View>
+        <View style={styles.profileHeader}>
+          <Image
+            source={{ uri: user?.user_metadata?.avatar_url || 'https://via.placeholder.com/150' }}
+            style={styles.avatar}
+            contentFit="cover"
+            transition={1000}
+          />
+          <ThemedText style={styles.name}>
+            {user?.user_metadata?.full_name || 'User'}
+          </ThemedText>
+          <ThemedText style={styles.email}>
+            {user?.email}
+          </ThemedText>
         </View>
 
         <Card style={styles.statsCard}>
@@ -286,6 +322,15 @@ export default function Profile() {
           </View>
           <Ionicons name="chevron-forward-outline" size={24} color={theme.colors.primary[500]} />
         </TouchableOpacity>
+
+        <Pressable
+          style={[styles.signOutButton, { borderColor: textColor }]}
+          onPress={handleSignOut}
+        >
+          <ThemedText style={styles.signOutText}>
+            Sign Out
+          </ThemedText>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   )

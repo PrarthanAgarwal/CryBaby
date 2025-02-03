@@ -41,8 +41,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-build-properties'
   ],
   extra: {
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+    SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
+    SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+    GOOGLE_WEB_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    GOOGLE_ANDROID_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
   },
   owner: 'prarthan'
 }) 
